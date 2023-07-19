@@ -1,0 +1,89 @@
+
+! Twice-integrated electron momentum density (EMD) plot for ferromagnetic Ni.
+
+! First the EMD is calculated on a regular H+k grid. This is then interpolated
+! and integrated in directions which are mutually orthogonal to each other and
+! along the plotting line. This line is given by plot1d.
+
+! Example by David Ernsting and Stephen Dugdale.
+
+tasks
+ 0
+ 651
+ 652
+ 
+
+highq
+ .true.
+
+ngridk
+  2 1 1
+
+potmode
+ 0
+
+reducek
+ 1
+
+reduceq
+ 1
+
+vkloff
+ 0.0 0.0 0
+
+ngridq
+ 2 1 1
+
+gmaxrf
+ 4.0
+
+nempty
+ 10
+
+
+tempk
+ 300
+
+
+
+lorbcnd
+ .true.
+
+
+spinpol
+  .false.
+
+wplot
+ 50 100  0  : nwplot, ngrkf, nswplot
+ 0 1.5     : wplot
+
+
+
+avec
+  1.0  1.0  0.0
+  1.0  0.0  1.0
+  0.0  1.0  1.0
+
+scale
+  3.322
+
+sppath
+  '../../species/'
+
+!wanproj		!projector flag
+! 1		!number of projectors - next 3 lines are repeated for each projector
+! 1 2 5		!species, l, reduced max lm (rlmmax) value
+! 5 6 7 8 9	!the lm quanties which will be projected (vector length eq. rlmmax)
+!-0.36749 0.11	![-10, 3] eV correlated window energies
+
+wanproj		!projector flag
+ 1		!number of projectors - next 3 lines are repeated for each projector
+ 1 2 5		!species, l, reduced max lm (rlmmax) value
+ 5 6 7 8 9	!the lm quanties which will be projected (vector length eq. rlmmax)
+ -0.36749 0.11	![-10, 3] eV correlated window energies
+
+atoms
+  1                                   : nspecies
+  'Ni.in'                             : spfname
+  1                                   : natoms
+  0.0  0.0  0.0    0.0  0.0  0.0      : atposl, bfcmt

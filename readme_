@@ -1,0 +1,65 @@
+try crpau.
+
+Work flow is:
+
+
+0. do ground calc.
+
+1. generate zrhokq= 
+  the matrix of <ψ_{k+q,n,σ}|exp(-i·(q+G)·r))|ψ_{k,n',σ'}>
+  see genzrhokq.f90
+
+2. init wanprj vars. 
+  see initwanprj_globalvars.f90 &
+    modwanprj
+
+3. generate the potential 
+  (
+    controled by potmode
+    full pot W : potmode=2
+    or sub pot U :potmode=1
+    or static pot V( the 4pi/|q+G|^2) potmode=0 )
+  for potmode=2; you can run task 120 and task 180
+  .These tasks are original elk subroutines, so should be %100 right
+    see 
+    genpolsub.f90, 
+    genepsinvrest.f90,
+    genwrest.f90
+
+4.  generated wanrhokq, (M_m,m',k,q,G quantity in appendix A of amadon paper.)
+    see genwanrhokq_matop.f90. 
+    The wannier projectors are generated on the fly
+    see 
+    wanprojkpl.f90
+
+5. calc umat for each qpoint. eq A2 in amadon's paper.
+   see genumatq.f90
+ 
+6. tasks are :
+    651: wantest; test wanprojkpl.f90 for k in non-red-k and k+q
+    652: writewanrho; generate the projected zrhokq---- the Σ_k wkptnr * M_m,m',k,q,G quantity .Output as :MMMQ_K_000000_IQ000001.OUT
+    653: generate the potential, controled by block :potmode. For full-intercation, you should use task120 and task 180.
+    654: generate the projected pot.
+
+Notice:
+ 1. the prefactor is omega*Ha_ev. Comparing with the prefac of gwsefmk.f90. They should be same.
+ 2. the wannier projector are generated for each non-reduced k-vec 
+    and k+q vec.
+    Thus the symmetry in wannier is not consisdered.
+    That should be just a increase of the computation
+  3. The generated 
+  4. task 651 can be used for test wanprojkpl.f90
+     task 652 will give you the wanrhokq
+     task 653 is for potential calc
+     task 654 is about doing the projection
+
+problems:
+  1. Problem is the value of static point of w=0  too high.
+    for both u, w, and 
+    V(which is strange for v, it may indicate that the prefac or
+      the projection value are wrong.)
+  2. not mpi parra
+  3. not specify atoms, so just test for single atom systems.
+
+    
+
